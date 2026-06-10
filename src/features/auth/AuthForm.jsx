@@ -35,17 +35,21 @@ export const AuthForm = () => {
 const handleGoogleLogin = async (e) => {
     e.preventDefault();
     
-    // Yeh strictly check karega ke site live hai ya local aur wahi URL redirect me pass karega
-    const currentUrl = "https://supabase-task.vercel.app/";
+    // Yeh alert humein batayega ke live site par sahi code chal raha hai ya nahi
+    alert("Executing Redirect to: https://supabase-task.vercel.app/");
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-            redirectTo: currentUrl, 
-        },
-    });
-    
-    if (error) console.error(error.message);
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: "https://supabase-task.vercel.app/", 
+            },
+        });
+        
+        if (error) throw error;
+    } catch (err) {
+        console.error("OAuth Error:", err.message);
+    }
 };
 
   // Facebook OAuth Login

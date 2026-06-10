@@ -32,16 +32,13 @@ export const AuthForm = () => {
   };
 
   // Google OAuth Login
-  const handleGoogleLogin = async () => {
-    setErrorMsg('');
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: window.location.origin // Automatically redirects back to localhost or your production URL
-      }
-    });
-    if (error) setErrorMsg(error.message);
-  };
+ const { data, error } = await supabase.auth.signInWithOAuth({
+  provider: 'google',
+  options: {
+    // Dynamically uses the live domain if on production, or localhost if testing locally
+    redirectTo: `${window.location.origin}/auth/callback`, 
+  },
+})
 
   // Facebook OAuth Login
   const handleFacebookLogin = async () => {

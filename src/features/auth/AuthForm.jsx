@@ -32,13 +32,20 @@ export const AuthForm = () => {
   };
 
   // Google OAuth Login
- const { data, error } = await supabase.auth.signInWithOAuth({
-  provider: 'google',
-  options: {
-    // Dynamically uses the live domain if on production, or localhost if testing locally
-    redirectTo: `${window.location.origin}/auth/callback`, 
-  },
-})
+const handleGoogleLogin = async (e) => { // <-- Added 'async'
+    e.preventDefault();
+    try {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: `${window.location.origin}`, // or your specific route
+            },
+        });
+        if (error) throw error;
+    } catch (err) {
+        console.error("Auth error:", err.message);
+    }
+};
 
   // Facebook OAuth Login
   const handleFacebookLogin = async () => {

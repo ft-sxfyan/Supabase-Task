@@ -35,14 +35,14 @@ export const AuthForm = () => {
 const handleGoogleLogin = async (e) => {
     e.preventDefault();
     
-    // Yeh alert humein batayega ke live site par sahi code chal raha hai ya nahi
-    alert("Executing Redirect to: https://supabase-task.vercel.app/");
-
     try {
+        // Yeh automatically local par localhost aur production par vercel ka URL utha lega
+        const currentUrl = window.location.origin;
+
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: "https://supabase-task.vercel.app/", 
+                redirectTo: currentUrl, 
             },
         });
         

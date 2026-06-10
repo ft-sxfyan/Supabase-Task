@@ -38,7 +38,7 @@ const handleGoogleLogin = async (e) => { // <-- Added 'async'
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: 'google',
             options: {
-                redirectTo: `${window.location.origin}`, // or your specific route
+                redirectTo: 'https://supabase-task.vercel.app/', // or your specific route
             },
         });
         if (error) throw error;

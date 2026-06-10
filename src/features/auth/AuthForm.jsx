@@ -36,7 +36,7 @@ const handleGoogleLogin = async (e) => {
     e.preventDefault();
     
     // Yeh strictly check karega ke site live hai ya local aur wahi URL redirect me pass karega
-    const currentUrl = "https://supabase-task.vercel.app";
+    const currentUrl = "https://supabase-task.vercel.app/";
 
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',

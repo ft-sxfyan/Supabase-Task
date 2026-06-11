@@ -7,7 +7,6 @@ export const Dashboard = () => {
   const [products, setProducts] = useState([]);
   const [dbStatus, setDbStatus] = useState('Connecting...');
 
-  // Form Input States (For Creation)
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -15,7 +14,6 @@ export const Dashboard = () => {
   const [imagePreview, setImagePreview] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  // Editing States (Tracks which card is being modified inline)
   const [editingId, setEditingId] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editPrice, setEditPrice] = useState('');
@@ -118,7 +116,6 @@ export const Dashboard = () => {
     if (!confirmDelete) return;
 
     try {
-      // 1. Delete record entry from Supabase database table
       const { error: dbError } = await supabase
         .from('products')
         .delete()
@@ -126,7 +123,6 @@ export const Dashboard = () => {
 
       if (dbError) throw dbError;
 
-      // 2. Safely parse and remove the asset item from storage bucket if it belongs to our bucket URL
       if (imageUrl && imageUrl.includes('product-images')) {
         const pathSegments = imageUrl.split('product-images/');
         if (pathSegments.length > 1) {
@@ -135,14 +131,12 @@ export const Dashboard = () => {
         }
       }
 
-      // 3. Update reactive state array locally to sync frontend layout UI instantly
       setProducts(products.filter(p => p.id !== id));
     } catch (err) {
       alert(`Delete failed: ${err.message}`);
     }
   };
 
-  // ACTIVATE EDIT INLINE MODE
   const startEditing = (product) => {
     setEditingId(product.id);
     setEditTitle(product.title);
@@ -150,7 +144,6 @@ export const Dashboard = () => {
     setEditDescription(product.description || '');
   };
 
-  // UPDATE PRODUCT (SAVE ACTIONS)
   const handleUpdateProduct = async (id) => {
     try {
       const updatedFields = {
@@ -166,9 +159,8 @@ export const Dashboard = () => {
 
       if (error) throw error;
 
-      // Refactor global products state array data maps
       setProducts(products.map(p => p.id === id ? { ...p, ...updatedFields } : p));
-      setEditingId(null); // Close layout form toggles
+      setEditingId(null); 
     } catch (err) {
       alert(`Update failed: ${err.message}`);
     }
@@ -179,7 +171,6 @@ export const Dashboard = () => {
   return (
     <div className="min-h-screen w-full bg-black text-white flex font-sans antialiased selection:bg-white/20">
       
-      {/* SIDEBAR NAVIGATION */}
       <aside className="w-64 border-r border-white/[0.07] bg-white/[0.01] backdrop-blur-xl flex flex-col p-6 hidden md:flex z-10">
         <div className="flex items-center gap-3 mb-10 px-2">
           <div className="w-8 h-8 rounded-lg overflow-hidden border border-white/20 shadow-inner flex items-center justify-center relative bg-gradient-to-tr from-yellow-500 via-blue-600 to-indigo-950">
@@ -236,7 +227,6 @@ export const Dashboard = () => {
           <button onClick={handleLogout} className="md:hidden py-2 px-4 rounded-xl text-xs bg-white text-black font-medium">Logout</button>
         </header>
 
-        {/* VIEW 1: CREATION FORM */}
         {activeTab === 'Overview' && (
           <section className="w-full max-w-xl mx-auto mt-2">
             <div className="p-8 rounded-2xl bg-white/[0.01] border border-white/10 backdrop-blur-2xl shadow-2xl">
@@ -281,7 +271,6 @@ export const Dashboard = () => {
           </section>
         )}
 
-        {/* VIEW 2: PRODUCTS PAGE GRID (WITH EDIT/DELETE SYSTEMS) */}
         {activeTab === 'Products' && (
           <section className="w-full transition-all">
             {products.length === 0 ? (
@@ -293,11 +282,11 @@ export const Dashboard = () => {
                 {products.map((product) => (
                   <div key={product.id} className="group rounded-2xl border border-white/[0.06] bg-white/[0.01] overflow-hidden backdrop-blur-md flex flex-col transition-all duration-300 hover:border-white/20">
                     
-                    {/* Image Area */}
-                    <div className="w-full aspect-[4/3] overflow-hidden bg-zinc-900 border-b border-white/[0.06] relative">
+                  
+                          <div className="w-full aspect-[4/3] overflow-hidden bg-zinc-900 border-b border-white/[0.06] relative">
                       <img src={product.image_url} alt={product.title} className="w-full h-full object-cover" />
                       
-                      {/* Price Badge Toggle */}
+                      
                       {editingId !== product.id && (
                         <span className="absolute top-3 right-3 px-2.5 py-1 text-xs font-semibold rounded-lg bg-black/80 text-white border border-white/10">
                           ${Number(product.price).toFixed(2)}
@@ -305,10 +294,9 @@ export const Dashboard = () => {
                       )}
                     </div>
 
-                    {/* Metadata Content Card (Conditional Render if editing or viewing) */}
                     <div className="p-5 flex flex-col flex-1 text-left relative">
                       {editingId === product.id ? (
-                        /* INLINE EDIT CARD CONTROLS FORM */
+                      
                         <div className="flex flex-col gap-3 w-full">
                           <input 
                             type="text" 
@@ -348,7 +336,6 @@ export const Dashboard = () => {
                           </div>
                         </div>
                       ) : (
-                        /* STANDARD ACTIVE DATA TEXT VIEW MODE */
                         <>
                           <h3 className="text-md font-semibold text-white tracking-wide truncate pr-16">
                             {product.title}
@@ -357,7 +344,6 @@ export const Dashboard = () => {
                             {product.description || "No description provided."}
                           </p>
 
-                          {/* ACTION UTILITY BUTTONS INTERFACE GRID */}
                           <div className="flex items-center gap-2 mt-4 pt-4 border-t border-white/[0.04]">
                             <button 
                               onClick={() => startEditing(product)}

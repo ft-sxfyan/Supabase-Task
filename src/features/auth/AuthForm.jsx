@@ -36,7 +36,6 @@ const handleGoogleLogin = async (e) => {
     e.preventDefault();
     
     try {
-        // Yeh automatically local par localhost aur production par vercel ka URL utha lega
         const currentUrl = window.location.origin;
 
         const { data, error } = await supabase.auth.signInWithOAuth({
@@ -103,7 +102,6 @@ const handleGoogleLogin = async (e) => {
             </button>
           </form>
 
-          {/* Social Icons section with working triggers */}
           <div className="mt-6">
             <div className="relative flex py-2 items-center justify-center">
               <div className="w-12 border-t border-white/10"></div>
@@ -145,7 +143,7 @@ const handleGoogleLogin = async (e) => {
           </div>
         </div>
       ) : (
-        /* Signup UI view stays identical */
+
         <div className="flex flex-col">
           <h2 className="text-3xl font-light tracking-wide text-white text-left mb-6">Create Account</h2>
           <form className="flex flex-col gap-4 text-left" onSubmit={handleSubmit}>

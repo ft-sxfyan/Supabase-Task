@@ -8,13 +8,11 @@ function App() {
   const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
-    // 1. Check current login state immediately when app loads up
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setInitializing(false);
     });
 
-    // 2. Continually listen for real-time changes (Sign in, Sign out, Account registration)
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
@@ -30,7 +28,6 @@ function App() {
     );
   }
 
-  // Router logic: Show dashboard if session exists, else show the Glassmorphic Auth card setup
   return (
     <>
       {session ? (
